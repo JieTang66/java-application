@@ -1,0 +1,837 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Userinterface.dior.admin;
+
+import Business.EcoSystem;
+import Business.Enterprise.BeautyEnterprise;
+import Business.Enterprise.Enterprise;
+import Business.Enterprise.SupplierEnterprise;
+import Business.Network.Network;
+import Business.Organization.DiorAdminOrganization;
+import Business.Organization.Organization;
+import Business.Product.Product;
+import Business.UserAccount.UserAccount;
+import Business.WorkQueue.ProductRequest;
+import Business.WorkQueue.ProductUpdateRequest;
+import Business.WorkQueue.WorkRequest;
+import java.awt.CardLayout;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.table.DefaultTableModel;
+
+/**
+ *
+ * @author too
+ */
+public class ProductManagement extends javax.swing.JPanel {
+
+    /**
+     * Creates new form OrderJPanel
+     */
+    private JPanel userProcessContainer;
+    private BeautyEnterprise beautyenterprise;
+    private UserAccount account;
+    private DiorAdminOrganization organization;
+    private EcoSystem business;
+    private Network network;
+    
+    public ProductManagement(JPanel userProcessContainer, UserAccount account, Organization organization, Enterprise enterprise, EcoSystem business) {
+        initComponents();
+        this.userProcessContainer = userProcessContainer;
+        beautyenterprise = (BeautyEnterprise)enterprise;
+        this.account = account;
+        this.business = business;
+        this.organization = (DiorAdminOrganization)organization;
+         network = searchNetwork();
+       
+        populateProductTable();
+        populateRequestTable();
+        populateRequestfromSupplierTable();
+        populatComboBox();
+    }
+    
+    public Network searchNetwork(){
+            for(Network network: business.getNetworkList()){
+                if(network.getEnterpriseDirectory().getEnterpriseList().contains(beautyenterprise))
+                    return network;
+        }
+            return null;
+        }
+    
+   
+    
+    public void populateRequestfromSupplierTable(){
+        DefaultTableModel model = (DefaultTableModel) RequestfromSupplierTable.getModel();
+        model.setRowCount(0);
+                for(WorkRequest request: beautyenterprise.getWorkQueue().getWorkRequestList()){
+                    if(request instanceof ProductRequest){
+                        
+                        Object[] row = new Object[4];
+                        row[0] = ((ProductRequest)request).getName();
+                        row[1] = ((ProductRequest)request).getQuality();
+                        row[2] = request.getStatus();
+                        row[3] = ((ProductRequest)request).getSupplierenterpirsename();
+                        model.addRow(row);
+                    }
+                }   
+            }   
+
+
+    
+    public void populateProductTable(){
+        DefaultTableModel model = (DefaultTableModel) ProductTable.getModel();
+        model.setRowCount(0);
+        for (Product p : beautyenterprise.getProductDir().getProductList()){
+            Object[] row = new Object[5];
+            row[0] = p;
+            row[1] = p.getProductId();
+            row[2] = p.getAvailNum();
+            row[3] = p.getPurchasingPrice();
+            row[4] = p.getSalesPrice();
+            
+            model.addRow(row);
+            
+        }
+    }
+    
+    public void populatComboBox(){
+       // typeComboBox.removeAllItems();
+        ComboBox.removeAllItems();   
+        for(Enterprise e: network.getEnterpriseDirectory().getEnterpriseList()){
+            if(e instanceof SupplierEnterprise){
+                
+                ComboBox.addItem(e.getName());
+            }
+        }
+    }
+    
+    public void populateRequestTable(){
+        DefaultTableModel model = (DefaultTableModel) PUrequestTable.getModel();
+        
+        model.setRowCount(0);
+        
+        for (WorkRequest request : organization.getWorkQueue().getWorkRequestList()){
+           if(request instanceof ProductUpdateRequest){
+            Object[] row = new Object[9];
+            row[0] = ((ProductUpdateRequest)request).getName();
+            row[1] = ((ProductUpdateRequest)request).getProductid();
+            row[2] = ((ProductUpdateRequest)request).getAvailnum();
+            row[3] = ((ProductUpdateRequest)request).getSaleprice();
+            row[4] = ((ProductUpdateRequest)request).getPurchasingprice();  
+            row[5] = request.getSender().getEmployee().getName();
+            row[6] = request;
+            row[7] = request.getStatus();
+            row[8] = request.getReceiver() == null?null :request.getReceiver() ;
+            model.addRow(row);
+           }
+        }
+    };
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        btnBack = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        PUrequestTable = new javax.swing.JTable();
+        orderStatusCombo = new javax.swing.JComboBox<>();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        btnAgree = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        ComboBox = new javax.swing.JComboBox();
+        jLabel4 = new javax.swing.JLabel();
+        txtQuatity = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        ProductTable = new javax.swing.JTable();
+        btnRefresh = new javax.swing.JButton();
+        txtId = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        btnUpdate = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        RequestfromSupplierTable = new javax.swing.JTable();
+        orderStatusCombo1 = new javax.swing.JComboBox<>();
+        jButton5 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
+
+        setBackground(new java.awt.Color(255, 255, 204));
+
+        btnBack.setBackground(new java.awt.Color(255, 204, 204));
+        btnBack.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
+        btnBack.setText("Back");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 204));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Replenishment Request"));
+
+        PUrequestTable.setBackground(new java.awt.Color(255, 255, 204));
+        PUrequestTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "Name", "ProductId", "Quantity", "Sale Price", "Purchasing Price", "Sender", "Message", "Statues", "Processor"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane3.setViewportView(PUrequestTable);
+        if (PUrequestTable.getColumnModel().getColumnCount() > 0) {
+            PUrequestTable.getColumnModel().getColumn(0).setResizable(false);
+            PUrequestTable.getColumnModel().getColumn(1).setResizable(false);
+            PUrequestTable.getColumnModel().getColumn(2).setResizable(false);
+            PUrequestTable.getColumnModel().getColumn(3).setResizable(false);
+            PUrequestTable.getColumnModel().getColumn(4).setResizable(false);
+            PUrequestTable.getColumnModel().getColumn(5).setResizable(false);
+            PUrequestTable.getColumnModel().getColumn(6).setResizable(false);
+            PUrequestTable.getColumnModel().getColumn(7).setResizable(false);
+            PUrequestTable.getColumnModel().getColumn(8).setResizable(false);
+        }
+
+        orderStatusCombo.setBackground(new java.awt.Color(255, 204, 204));
+        orderStatusCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Processed", "Processing" }));
+
+        jButton3.setBackground(new java.awt.Color(255, 204, 204));
+        jButton3.setText("Search");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jButton4.setBackground(new java.awt.Color(255, 204, 204));
+        jButton4.setText("View all");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
+        btnAgree.setBackground(new java.awt.Color(255, 204, 204));
+        btnAgree.setText("Processed");
+        btnAgree.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgreeActionPerformed(evt);
+            }
+        });
+
+        jButton2.setBackground(new java.awt.Color(255, 204, 204));
+        jButton2.setText("Request ");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        ComboBox.setBackground(new java.awt.Color(255, 204, 204));
+        ComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        jLabel4.setText("Quaitity:");
+
+        txtQuatity.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtQuatityActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Request Productc From:");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel1))
+                        .addGap(29, 29, 29)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(txtQuatity, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jButton2))
+                            .addComponent(ComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 1109, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(orderStatusCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton4)
+                            .addComponent(btnAgree))
+                        .addGap(27, 27, 27))))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap(19, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(orderStatusCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnAgree))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(ComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(txtQuatity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton2)))
+        );
+
+        jLabel7.setFont(new java.awt.Font("Lucida Grande", 1, 24)); // NOI18N
+        jLabel7.setText("Product  Management");
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 204));
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Product List"));
+
+        ProductTable.setBackground(new java.awt.Color(255, 255, 204));
+        ProductTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "Name", "ProductId", "AvailNum", "Purchasing Price", "Sale Price"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(ProductTable);
+        if (ProductTable.getColumnModel().getColumnCount() > 0) {
+            ProductTable.getColumnModel().getColumn(0).setResizable(false);
+            ProductTable.getColumnModel().getColumn(1).setResizable(false);
+            ProductTable.getColumnModel().getColumn(2).setResizable(false);
+            ProductTable.getColumnModel().getColumn(3).setResizable(false);
+            ProductTable.getColumnModel().getColumn(4).setResizable(false);
+            ProductTable.getColumnModel().getColumn(4).setHeaderValue("Sale Price");
+        }
+
+        btnRefresh.setBackground(new java.awt.Color(255, 204, 204));
+        btnRefresh.setText("Show All");
+        btnRefresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRefreshActionPerformed(evt);
+            }
+        });
+
+        txtId.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtIdActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("ID:");
+
+        jButton1.setBackground(new java.awt.Color(255, 204, 204));
+        jButton1.setText("Search");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        btnUpdate.setBackground(new java.awt.Color(255, 204, 204));
+        btnUpdate.setText("Update");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
+
+        btnDelete.setBackground(new java.awt.Color(255, 204, 204));
+        btnDelete.setText("Delete");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 673, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnUpdate, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)
+                    .addComponent(btnDelete, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addGap(25, 25, 25))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(464, 464, 464)
+                .addComponent(jLabel3)
+                .addGap(18, 18, 18)
+                .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1)
+                .addGap(164, 164, 164))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addGap(7, 7, 7)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(btnUpdate)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnDelete)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnRefresh)))
+                .addGap(13, 13, 13))
+        );
+
+        jPanel3.setBackground(new java.awt.Color(255, 255, 204));
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Product Replenish Order"));
+
+        RequestfromSupplierTable.setBackground(new java.awt.Color(255, 255, 204));
+        RequestfromSupplierTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Name", "Quitity", "Satus", "Supplier"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(RequestfromSupplierTable);
+        if (RequestfromSupplierTable.getColumnModel().getColumnCount() > 0) {
+            RequestfromSupplierTable.getColumnModel().getColumn(0).setResizable(false);
+            RequestfromSupplierTable.getColumnModel().getColumn(1).setResizable(false);
+            RequestfromSupplierTable.getColumnModel().getColumn(2).setResizable(false);
+            RequestfromSupplierTable.getColumnModel().getColumn(3).setResizable(false);
+        }
+
+        orderStatusCombo1.setBackground(new java.awt.Color(255, 204, 204));
+        orderStatusCombo1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pending", "Shipped", " " }));
+
+        jButton5.setBackground(new java.awt.Color(255, 204, 204));
+        jButton5.setText("Search");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
+        jButton6.setBackground(new java.awt.Color(255, 204, 204));
+        jButton6.setText("View all");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 671, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(orderStatusCombo1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton6))
+                .addGap(15, 15, 15))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(orderStatusCombo1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton5)
+                        .addGap(12, 12, 12)
+                        .addComponent(jButton6)))
+                .addContainerGap(12, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(102, 102, 102)
+                        .addComponent(jLabel7))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(185, 185, 185)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(185, 185, 185)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(94, 94, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(48, 48, 48)
+                .addComponent(jLabel7)
+                .addGap(32, 32, 32)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(29, 29, 29))
+        );
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        // TODO add your handling code here:
+        userProcessContainer.remove(this);
+        CardLayout layout = (CardLayout) userProcessContainer.getLayout();
+        layout.previous(userProcessContainer);
+    }//GEN-LAST:event_btnBackActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        // TODO add your handling code here:
+        
+        int row = ProductTable.getSelectedRow();
+        if(row<0){
+            JOptionPane.showMessageDialog(null, "Please select a row from the table first", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        Product product = (Product)ProductTable.getValueAt(row, 0);
+        ProductInfoUpdate piu = new ProductInfoUpdate(userProcessContainer,product);
+        userProcessContainer.add("createproduct",piu);
+        CardLayout layout = (CardLayout)userProcessContainer.getLayout();
+        layout.next(userProcessContainer);
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void txtIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtIdActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        // TODO add your handling code here:
+        int row = ProductTable.getSelectedRow();
+        if(row<0){
+            JOptionPane.showMessageDialog(null, "Please select a row from the table first", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        } 
+        int selectionButton = JOptionPane.YES_NO_OPTION;
+        int selectionResult = JOptionPane.showConfirmDialog(null, "Are you sure to delete??","Warning",selectionButton);
+        if(selectionResult == JOptionPane.YES_OPTION){
+        Product product = (Product)ProductTable.getValueAt(row, 0);
+        beautyenterprise.getProductDir().removeProduct(product);
+        populateProductTable();
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        int search = Integer.parseInt(txtId.getText());
+        for(Product p : beautyenterprise.getProductDir().getProductList()){
+            if(p.getProductId() == search){
+               DefaultTableModel model = (DefaultTableModel) ProductTable.getModel();
+                model.setRowCount(0);
+                 Object[] row = new Object[5];
+                 row[0] = p;
+            row[1] = p.getProductId();
+            row[2] = p.getAvailNum();
+            row[3] = p.getPurchasingPrice();
+            row[4] = p.getSalesPrice();
+            model.addRow(row);
+            }
+            
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
+        // TODO add your handling code here:
+        populateProductTable();
+    }//GEN-LAST:event_btnRefreshActionPerformed
+
+    private void btnAgreeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgreeActionPerformed
+        // TODO add your handling code here:
+        int row = PUrequestTable.getSelectedRow();
+        if(row<0){
+            JOptionPane.showMessageDialog(null, "Please select a row from the table first", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        } 
+        
+        ProductUpdateRequest r = (ProductUpdateRequest)PUrequestTable.getValueAt(row, 6);
+        
+        int Id = r.getProductid();
+        for(Product product:beautyenterprise.getProductDir().getProductList()){
+            if(product.getProductId() == Id){
+                product.setProductName(r.getName());
+                product.setPurchasingPrice(r.getPurchasingprice());
+                product.setSalesPrice(r.getSaleprice());
+                product.setAvailNum(r.getAvailnum());
+            }
+        }
+        r.setStatus("Processed");
+        r.setReceiver(account);
+        populateRequestTable();
+        
+    }//GEN-LAST:event_btnAgreeActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        int row = PUrequestTable.getSelectedRow();
+        if(row<0){
+            JOptionPane.showMessageDialog(null, "Please select a row from the table first", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }else if(txtQuatity.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "Quatity cannotbe empty");
+            return;
+        }
+        
+        boolean existence = true;
+        ProductUpdateRequest r = (ProductUpdateRequest)PUrequestTable.getValueAt(row, 6);
+        if(r.getStatus().equals("Processed")){
+             JOptionPane.showMessageDialog(null, "This Request has been processed!", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        String suppliername = String.valueOf(ComboBox.getSelectedItem());
+         for (Enterprise enterprise : network.getEnterpriseDirectory().getEnterpriseList()){
+            if (enterprise instanceof SupplierEnterprise && enterprise.getName().equals(suppliername)){
+                for(Product p : ((SupplierEnterprise)enterprise).getProductDir().getProductList()){
+                    if(p.getProductName().equals(r.getName())){
+                        existence = false;
+                        break;
+                    }
+                }
+            }
+         }
+         if(existence){
+             JOptionPane.showMessageDialog(null, "This supplier does have this product");
+            return;
+         }
+         
+        ProductRequest request = new ProductRequest(); 
+        request.setProductid(r.getProductid());
+        request.setName(r.getName());
+        request.setQuality(Integer.parseInt(txtQuatity.getText()));
+        request.setStatus("Pending");
+        request.setBeautyenterprisename(beautyenterprise.getName());
+        request.setSupplierenterpirsename(suppliername);
+        
+        
+        Network network = business.getNetworkList().get(0);
+        SupplierEnterprise supplierenterprise = null;
+        for (Enterprise enterprise : network.getEnterpriseDirectory().getEnterpriseList()){
+            if (enterprise instanceof SupplierEnterprise && enterprise.getName().equals(suppliername)){   
+                supplierenterprise = (SupplierEnterprise)enterprise;
+                supplierenterprise.getWorkQueue().getWorkRequestList().add(request);
+                
+            }
+        }
+        
+        if (supplierenterprise!=null){
+            
+//            supplierenterprise.getWorkQueue().getWorkRequestList().add(request);  
+            beautyenterprise.getWorkQueue().getWorkRequestList().add(request);
+        }
+        populateRequestfromSupplierTable();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void txtQuatityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtQuatityActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtQuatityActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        String searchstatus = String.valueOf(orderStatusCombo.getSelectedItem());
+        if(orderStatusCombo.getSelectedItem().equals("Processed")){
+             DefaultTableModel model = (DefaultTableModel) PUrequestTable.getModel();
+        
+        model.setRowCount(0);
+        
+        for (WorkRequest request : organization.getWorkQueue().getWorkRequestList()){
+           if(request instanceof ProductUpdateRequest && request.getStatus().equals(searchstatus)){
+            Object[] row = new Object[8];
+            row[0] = ((ProductUpdateRequest)request).getName();
+            row[1] = ((ProductUpdateRequest)request).getProductid();
+            row[2] = ((ProductUpdateRequest)request).getAvailnum();
+            row[3] = ((ProductUpdateRequest)request).getSaleprice();
+            row[4] = ((ProductUpdateRequest)request).getPurchasingprice();  
+            row[5] = request.getSender().getEmployee().getName();
+            row[6] = request;
+            row[7] = request.getStatus();
+            model.addRow(row);
+           }
+        }
+
+        }else if(orderStatusCombo.getSelectedItem().equals("Processing")){
+            DefaultTableModel model = (DefaultTableModel) PUrequestTable.getModel();
+        
+        model.setRowCount(0);
+        
+        for (WorkRequest request : organization.getWorkQueue().getWorkRequestList()){
+           if(request instanceof ProductUpdateRequest && request.getStatus().equals(searchstatus)){
+            Object[] row = new Object[8];
+            row[0] = ((ProductUpdateRequest)request).getName();
+            row[1] = ((ProductUpdateRequest)request).getProductid();
+            row[2] = ((ProductUpdateRequest)request).getAvailnum();
+            row[3] = ((ProductUpdateRequest)request).getSaleprice();
+            row[4] = ((ProductUpdateRequest)request).getPurchasingprice();  
+            row[5] = request.getSender().getEmployee().getName();
+            row[6] = request;
+            row[7] = request.getStatus();
+            model.addRow(row);
+           }
+        }
+        }
+        
+
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        populateRequestTable();
+
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+        String searchstatus = String.valueOf(orderStatusCombo1.getSelectedItem());
+        if(orderStatusCombo1.getSelectedItem().equals("Pending")){
+              DefaultTableModel model = (DefaultTableModel) RequestfromSupplierTable.getModel();
+                    model.setRowCount(0);
+                for(WorkRequest request: beautyenterprise.getWorkQueue().getWorkRequestList()){
+                    if(request instanceof ProductRequest && request.getStatus().equals(searchstatus)){
+                        System.out.println(((ProductRequest)request).getProductid());
+                        Object[] row = new Object[4];
+                        row[0] = ((ProductRequest)request).getName();
+                        row[1] = ((ProductRequest)request).getQuality();
+                        row[2] = request.getStatus();
+                        row[3] = ((ProductRequest)request).getSupplierenterpirsename() == null ? null : ((ProductRequest)request).getSupplierenterpirsename();
+                        model.addRow(row);
+                    }
+                }   
+
+        }else if(orderStatusCombo.getSelectedItem().equals("Shipped")){
+            DefaultTableModel model = (DefaultTableModel) RequestfromSupplierTable.getModel();
+                    model.setRowCount(0);
+        
+         for(WorkRequest request: beautyenterprise.getWorkQueue().getWorkRequestList()){
+                    if(request instanceof ProductRequest && request.getStatus().equals(searchstatus)){
+                        System.out.println(((ProductRequest)request).getProductid());
+                        Object[] row = new Object[4];
+                        row[0] = ((ProductRequest)request).getName();
+                        row[1] = ((ProductRequest)request).getQuality();
+                        row[2] = request.getStatus();
+                        row[3] = ((ProductRequest)request).getSupplierenterpirsename() == null ? null : ((ProductRequest)request).getSupplierenterpirsename();
+                        model.addRow(row);
+                    }
+                }   
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+        populateRequestfromSupplierTable();
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox ComboBox;
+    private javax.swing.JTable PUrequestTable;
+    private javax.swing.JTable ProductTable;
+    private javax.swing.JTable RequestfromSupplierTable;
+    private javax.swing.JButton btnAgree;
+    private javax.swing.JButton btnBack;
+    private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnRefresh;
+    private javax.swing.JButton btnUpdate;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JComboBox<String> orderStatusCombo;
+    private javax.swing.JComboBox<String> orderStatusCombo1;
+    private javax.swing.JTextField txtId;
+    private javax.swing.JTextField txtQuatity;
+    // End of variables declaration//GEN-END:variables
+}
